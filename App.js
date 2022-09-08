@@ -1,5 +1,12 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View, Button, TextInput } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Button,
+  TextInput,
+  ScrollView,
+} from "react-native";
 import { useState } from "react";
 
 export default function App() {
@@ -11,21 +18,25 @@ export default function App() {
   }
 
   function addGoalHandler() {
-    console.log(enteredGoalText);
+    //Actual time
+    const actualTime = `${new Date().toLocaleDateString()} - ${new Date().getHours()}:${new Date().getMinutes()}`;
+    console.log(actualTime);
+    // console.log(enteredGoalText);
     // setCourseGoals([...courseGoals, enteredGoalText])
     // Mejor practica:
     setCourseGoals((currentCourseGoals) => [
       {
         id: new Date() * 1,
         data: enteredGoalText,
+        date: actualTime,
       },
       ...currentCourseGoals,
     ]);
     setEnteredGoalText("");
   }
 
-  function deleteGoal(goalId){
-    const newArray = courseGoals.filter((el)=> el.id != goalId);
+  function deleteGoal(goalId) {
+    const newArray = courseGoals.filter((el) => el.id != goalId);
     setCourseGoals(newArray);
   }
 
@@ -34,22 +45,35 @@ export default function App() {
       <View style={styles.inputsContainer}>
         <TextInput
           style={styles.textInput}
-          placeholder="Your course goal!"
+          placeholder="Enter a new TASK"
           value={enteredGoalText}
           onChangeText={goalInputHandler}
         />
         <Button title="Add goal" onPress={addGoalHandler} />
       </View>
       <View style={styles.goalsData}>
-        <Text>List of goals...</Text>
-        <View style={styles.goals_container}>
-          {courseGoals?.map((goal) => (
-            <View style={styles.box} key={goal.id}>
-              <Text style={styles.box_text}>{goal.data}</Text>
-              <Button color="#ff4d4d" title='DELETE' onPress={()=>deleteGoal(goal.id)}/>
-            </View>
-          ))}
-        </View>
+        <Text style={styles.taskstitle}>List of tasks:</Text>
+        <ScrollView>
+          <View style={styles.goals_container}>
+            {courseGoals.length > 0 &&
+              courseGoals?.map((goal) => (
+                <View style={styles.box} key={goal.id}>
+                  <Text style={styles.box_text}>{goal.data}</Text>
+                  <Text>{goal.date}</Text>
+                  <Button
+                    color="#ff4d4d"
+                    title="DELETE"
+                    onPress={() => deleteGoal(goal.id)}
+                  />
+                </View>
+              ))}
+            {courseGoals.length === 0 && (
+              <View>
+                <Text>ADD A TASK PLEASE 📃</Text>
+              </View>
+            )}
+          </View>
+        </ScrollView>
       </View>
     </View>
   );
@@ -77,13 +101,16 @@ const styles = StyleSheet.create({
   goalsData: {
     flex: 6,
   },
+  taskstitle: {
+    fontSize: 22,
+    paddingBottom: 4,
+  },
   goals_container: {
     flex: 1,
     flexDirection: "row",
     flexWrap: "wrap",
     alignItems: "center",
     justifyContent: "center",
-    padding: 10,
     width: "100%",
   },
   box: {
@@ -98,5 +125,4 @@ const styles = StyleSheet.create({
   box_text: {
     marginBottom: 10,
   },
-
 });
