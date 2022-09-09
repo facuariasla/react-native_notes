@@ -9,6 +9,8 @@ import {
   FlatList,
 } from "react-native";
 import { useState } from "react";
+import TaskItem from "./components/TaskItem";
+import TaskInput from "./components/TaskInput";
 
 export default function App() {
   const [enteredGoalText, setEnteredGoalText] = useState("");
@@ -41,32 +43,13 @@ export default function App() {
     setCourseGoals(newArray);
   }
 
-  // Flatlist box:
-  function renderItem({ item }) {
-    return (
-      <View style={styles.box}>
-        <Text style={styles.box_text}>{item.data}</Text>
-        <Text>{item.date}</Text>
-        <Button
-          color="#ff4d4d"
-          title="DELETE"
-          onPress={() => deleteGoal(item.id)}
-        />
-      </View>
-    );
-  }
-
   return (
     <View style={styles.container}>
-      <View style={styles.inputsContainer}>
-        <TextInput
-          style={styles.textInput}
-          placeholder="Enter a new TASK"
-          value={enteredGoalText}
-          onChangeText={goalInputHandler}
-        />
-        <Button title="Add task" onPress={addGoalHandler} />
-      </View>
+      <TaskInput
+        goalInputHandler={goalInputHandler}
+        enteredGoalText={enteredGoalText}
+        addGoalHandler={addGoalHandler}
+      />
       <View style={styles.goalsData}>
         <Text style={styles.taskstitle}>List of tasks:</Text>
         {/* <ScrollView> */}
@@ -76,7 +59,9 @@ export default function App() {
               alwaysBounceVertical
               data={courseGoals}
               keyExtractor={(item) => item.id}
-              renderItem={renderItem}
+              renderItem={(data) => (
+                <TaskItem item={data} deleteGoal={deleteGoal} />
+              )}
             ></FlatList>
           )}
           {courseGoals.length === 0 && (
@@ -97,20 +82,6 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 50,
   },
-  inputsContainer: {
-    flex: 1,
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  textInput: {
-    height: 35,
-    borderWidth: 1,
-    width: "70%",
-    marginBottom: 10,
-    marginTop: 10,
-    marginRight: 6,
-    paddingHorizontal: 10,
-  },
   goalsData: {
     flex: 6,
   },
@@ -125,18 +96,5 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     width: "100%",
-  },
-  box: {
-    flex: 1,
-    minHeight: 30,
-    borderWidth: 1,
-    borderRadius: 6,
-    borderColor: "#000",
-    margin: 4,
-    padding: 4,
-    flexDirection: "column",
-  },
-  box_text: {
-    marginBottom: 14,
   },
 });
