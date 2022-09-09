@@ -7,7 +7,7 @@ import { View, Text, Button, Pressable } from "react-native";
 // da un color cuando tocamos el Pressable (ver mas en documentacion) [solo Android]
 
 export default function TaskItem({ item, deleteGoal }) {
-  return (    
+  return (
     <View style={styles.box}>
       <Text style={styles.box_text}>{item.item.data}</Text>
       <Text>{item.item.date}</Text>
@@ -33,5 +33,6 @@ const styles = StyleSheet.create({
   },
   box_text: {
     marginBottom: 14,
+    fontSize: 16,
   },
 });

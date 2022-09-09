@@ -1,4 +1,11 @@
-import { StyleSheet, Text, View, FlatList } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  FlatList,
+  Button,
+  Pressable,
+} from "react-native";
 import { useState } from "react";
 import TaskItem from "./components/TaskItem";
 import TaskInput from "./components/TaskInput";
@@ -6,6 +13,7 @@ import TaskInput from "./components/TaskInput";
 export default function App() {
   const [enteredGoalText, setEnteredGoalText] = useState("");
   const [courseGoals, setCourseGoals] = useState([]);
+  const [modalVisible, setModalVisible] = useState(false);
 
   function goalInputHandler(enteredText) {
     setEnteredGoalText(enteredText);
@@ -13,6 +21,7 @@ export default function App() {
 
   function addGoalHandler() {
     //Actual time
+    if (!enteredGoalText) return;
     const actualTime = `${new Date().toLocaleDateString()} - ${new Date().getHours()}:${new Date().getMinutes()}`;
     console.log(actualTime);
     // console.log(enteredGoalText);
@@ -27,6 +36,7 @@ export default function App() {
       ...currentCourseGoals,
     ]);
     setEnteredGoalText("");
+    setModalVisible(false);
   }
 
   function deleteGoal(goalId) {
@@ -36,11 +46,27 @@ export default function App() {
 
   return (
     <View style={styles.container}>
+      {/* <Button
+        title="Add New Task"
+        color="#4AB06C"
+        
+      /> */}
+      <Pressable
+        android_ripple={{color:'#57C67C'}}
+        style={styles.pressableAdd}
+        onPress={() => setModalVisible(true)}
+      >
+        <Text style={styles.pressableText}>ADD NEW TASK</Text>
+      </Pressable>
+
       <TaskInput
         goalInputHandler={goalInputHandler}
         enteredGoalText={enteredGoalText}
         addGoalHandler={addGoalHandler}
+        visible={modalVisible}
+        setModalVisible={setModalVisible}
       />
+
       <View style={styles.goalsData}>
         <Text style={styles.taskstitle}>List of tasks:</Text>
         {/* <ScrollView> */}
@@ -72,9 +98,23 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 50,
+    paddingTop: 80,
+  },
+  pressableAdd: {
+    height: 60,
+    width: "100%",
+    backgroundColor: "#4AB06C",
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 6,
+  },
+  pressableText: {
+    fontSize: 16,
+    color: "#fff",
   },
   goalsData: {
     flex: 6,
+    paddingTop: 20,
   },
   taskstitle: {
     fontSize: 22,
