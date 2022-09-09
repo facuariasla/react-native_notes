@@ -6,6 +6,7 @@ import {
   Button,
   TextInput,
   ScrollView,
+  FlatList,
 } from "react-native";
 import { useState } from "react";
 
@@ -40,6 +41,21 @@ export default function App() {
     setCourseGoals(newArray);
   }
 
+  // Flatlist box:
+  function renderItem({ item }) {
+    return (
+      <View style={styles.box}>
+        <Text style={styles.box_text}>{item.data}</Text>
+        <Text>{item.date}</Text>
+        <Button
+          color="#ff4d4d"
+          title="DELETE"
+          onPress={() => deleteGoal(item.id)}
+        />
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.inputsContainer}>
@@ -49,31 +65,28 @@ export default function App() {
           value={enteredGoalText}
           onChangeText={goalInputHandler}
         />
-        <Button title="Add goal" onPress={addGoalHandler} />
+        <Button title="Add task" onPress={addGoalHandler} />
       </View>
       <View style={styles.goalsData}>
         <Text style={styles.taskstitle}>List of tasks:</Text>
-        <ScrollView>
-          <View style={styles.goals_container}>
-            {courseGoals.length > 0 &&
-              courseGoals?.map((goal) => (
-                <View style={styles.box} key={goal.id}>
-                  <Text style={styles.box_text}>{goal.data}</Text>
-                  <Text>{goal.date}</Text>
-                  <Button
-                    color="#ff4d4d"
-                    title="DELETE"
-                    onPress={() => deleteGoal(goal.id)}
-                  />
-                </View>
-              ))}
-            {courseGoals.length === 0 && (
-              <View>
-                <Text>ADD A TASK PLEASE 📃</Text>
-              </View>
-            )}
-          </View>
-        </ScrollView>
+        {/* <ScrollView> */}
+        <View style={styles.goals_container}>
+          {courseGoals.length > 0 && (
+            <FlatList
+              alwaysBounceVertical
+              data={courseGoals}
+              keyExtractor={(item) => item.id}
+              renderItem={renderItem}
+            ></FlatList>
+          )}
+          {courseGoals.length === 0 && (
+            <View>
+              <Text>ADD A TASK PLEASE 📃</Text>
+            </View>
+          )}
+        </View>
+
+        {/* </ScrollView> */}
       </View>
     </View>
   );
@@ -114,15 +127,16 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   box: {
-    width: "100%",
+    flex: 1,
     minHeight: 30,
-    borderWidth: 2,
+    borderWidth: 1,
+    borderRadius: 6,
     borderColor: "#000",
     margin: 4,
     padding: 4,
     flexDirection: "column",
   },
   box_text: {
-    marginBottom: 10,
+    marginBottom: 14,
   },
 });
