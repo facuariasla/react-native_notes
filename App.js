@@ -1,13 +1,4 @@
-import { StatusBar } from "expo-status-bar";
-import {
-  StyleSheet,
-  Text,
-  View,
-  Button,
-  TextInput,
-  ScrollView,
-  FlatList,
-} from "react-native";
+import { StyleSheet, Text, View, FlatList } from "react-native";
 import { useState } from "react";
 import TaskItem from "./components/TaskItem";
 import TaskInput from "./components/TaskInput";

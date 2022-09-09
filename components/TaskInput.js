@@ -1,20 +1,21 @@
-import { StyleSheet, View, TextInput, Button } from "react-native"
+import { StyleSheet, View, TextInput, Button } from "react-native";
 
-
-export default function TaskInput({goalInputHandler, enteredGoalText, addGoalHandler}) {
-
+export default function TaskInput({
+  goalInputHandler,
+  enteredGoalText,
+  addGoalHandler,
+}) {
   return (
     <View style={styles.inputsContainer}>
-    <TextInput
-      style={styles.textInput}
-      placeholder="Enter a new TASK"
-      value={enteredGoalText}
-      onChangeText={goalInputHandler}
-    />
-    <Button title="Add task" onPress={addGoalHandler} />
-  </View>
-  )
-
+      <TextInput
+        style={styles.textInput}
+        placeholder="Enter a new TASK"
+        value={enteredGoalText}
+        onChangeText={goalInputHandler}
+      />
+      <Button title="Add task" onPress={addGoalHandler} />
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
